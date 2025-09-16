@@ -31,6 +31,24 @@ public class Validator {
             }
         }
     }
+     public static float validPositiveFloat(String input)
+    {
+       
+        while (true)
+        { 
+            if (!input.equals("")) System.out.print(input);
+            String value = scan.nextLine().trim();
+            try {
+                float x = Float.parseFloat(value);
+                if (x>0) return x;
+                System.out.println("Postive number please!");
+                
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid! Enter the number");
+                
+            }
+        }
+    }
     public static int validInt(String input)
     {
        

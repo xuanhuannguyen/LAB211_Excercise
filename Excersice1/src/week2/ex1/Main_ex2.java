@@ -12,11 +12,13 @@ import Utils.Validator;
  * @author Admin
  */
 public class Main_ex2 extends Menu {
-    private CaculatorProgram caculProgram;
+    private CalculatorProgram calculProgram;
+    private BMI_Calculator bmiCal;
 
     public Main_ex2(String title, String[] function) {
         super(title, function);
-        caculProgram = new CaculatorProgram();
+        
+        bmiCal = new BMI_Calculator();
     }
 
     @Override
@@ -33,33 +35,29 @@ public class Main_ex2 extends Menu {
     }
 
     public void normalCal() {
-        Float memory = null;
+        calculProgram = new CalculatorProgram();
         String operator = "";
+        calculProgram.setMemory(Validator.validFloat("Enter number:"));
         while (true) {
             float number;
-            if (memory == null) {
-                memory = Validator.validFloat("Enter number:");
-                operator = Utils_ex2.vaidOperator();
-                if (operator.equals("="))
+            operator = Utils_ex2.vaidOperator();
+            if (operator.equals("="))
                     break;
-                number = Validator.validFloat("Enter number:");
-            } else {
-                operator = Utils_ex2.vaidOperator();
-                if (operator.equals("="))
-                    break;
-                number = Validator.validFloat("Enter number:");
-            }
-            memory = caculProgram.normalCal(memory, number, operator);
-            System.out.println("Memory: " + memory);
+            number = Validator.validFloat("Enter number:");
+            
+            calculProgram.calculate(number, operator);
+            System.out.println("Memory: " + calculProgram.getMemory());
 
         }
-        System.out.println("Result:" + memory);
+        System.out.println("Result:" +calculProgram.getMemory());
     }
 
     public void bmiCal() {
-        float weight = Validator.validFloat("Enter Weight(kg): ");
-        float height = Validator.validFloat("Enter Height(cm): ");
-        System.out.println(caculProgram.BMICal(weight, height));
+        bmiCal = new BMI_Calculator();
+        bmiCal.setWeight(Validator.validFloat("Enter Weight(kg): "));
+        bmiCal.setHeight(Validator.validFloat("Enter Height(cm): "));
+        bmiCal.BMICal();
+        System.out.println(bmiCal.BMICal());
     }
 
     public static void main(String[] args) {
