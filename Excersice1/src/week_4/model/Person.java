@@ -26,8 +26,7 @@ public class Person {
         this.major = major;
     }
 
-    @Override
-    public String toString() {
+    public String toStringPerson() {
         return "Person{" + "ID=" + ID + ", fullName=" + fullName + ", number=" + number + ", yearOfBirth=" + yearOfBirth + ", major=" + major + '}';
     }
 

@@ -6,10 +6,16 @@ package week_4.control;
 
 import Utils.Menu;
 import Utils.Validator;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import week_4.DAO.PersonDAO;
+import week_4.DAO.StudentDAO;
+import week_4.DAO.TeacherDAO;
 import week_4.model.Person;
 import week_4.model.PersonList;
 import week_4.model.Student;
@@ -24,7 +30,7 @@ public class Management extends Menu{
     private static final Scanner scan = new Scanner(System.in);
     private PersonList objPersonList;
 
-    public Management(String title, String[] function) {
+    public Management(String title, String[] function) throws SQLException {
         super(title, function);
         objPersonList = new PersonList();
             
@@ -87,7 +93,7 @@ public class Management extends Menu{
         
     }
     public void person() {
-        String subMenuPerson[] = {"Search","Print all"};
+        String subMenuPerson[] = {"Search","Print all","Exited"};
         Menu subMenu = new Menu("--Person Management--",subMenuPerson) {
             @Override 
             public void execute(int n) {
@@ -96,14 +102,18 @@ public class Management extends Menu{
                         search();
                     }
                     case 2 -> {
+                    try {
                         printAll();
+                    } catch (SQLException ex) {
+                        Logger.getLogger(Management.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                     }
                 }
             }
         };
         subMenu.run();
     }
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
         String menu[] = {"Tearcher","Student","Person","Exit"};
         Management main = new Management("--Information Management--", menu);
         main.run();
@@ -155,6 +165,13 @@ public class Management extends Menu{
        }
        double salaryCoefficient = Utils.Validator.validPositiveFloat("Enter salary coefficient");
        Teacher teacher = new Teacher(person.getID(), person.getFullName(),person.getNumber(),person.getYearOfBirth(),person.getMajor(), yearInProfession, contract, salaryCoefficient);
+       TeacherDAO teacherDao = new TeacherDAO();
+       try {
+           teacherDao.add(teacher);
+       } catch (Exception e) {
+           System.out.println("SQL fail!");
+       }
+       
        return teacher;
    }   
    public Student objStudent() {
@@ -183,6 +200,13 @@ public class Management extends Menu{
            System.out.println("Invalid score! From 0 -> 100");
        }
        Student student = new Student(person.getID(), person.getFullName(),person.getNumber(),person.getYearOfBirth(),person.getMajor(), yearOfAdmisstion, entranceEnglishScore);
+       StudentDAO studentDao = new StudentDAO();
+       try {
+           
+           studentDao.add(student);
+           System.out.println("Add student to database successully!");
+       } catch (Exception e) {
+       }
        return student;
    }
 //   Input Function 
@@ -198,6 +222,7 @@ public class Management extends Menu{
     
     public void inputStudent() {
         objPersonList.addPerson(objStudent());
+        
     }
     public void printStudent() {
         ArrayList<Student> studentList = objPersonList.getStudentList();
@@ -211,8 +236,10 @@ public class Management extends Menu{
             System.out.println(person);
         }
     }
-    public void printAll() {
-        print(objPersonList.getPersonList());
+    public void printAll() throws SQLException {
+        for (Person person : objPersonList.getAll()) {
+            System.out.println(person.toStringPerson());
+        }
     }
     public void print(Object object) {
         if (object instanceof Iterable<?>) {

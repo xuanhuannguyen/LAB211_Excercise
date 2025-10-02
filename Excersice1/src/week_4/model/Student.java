@@ -21,7 +21,7 @@ public class Student extends Person {
 
     @Override
     public String toString() {
-        return super.toString() + "yearOfAdmisson=" + yearOfAdmisson + ", entranceEnglishScore=" + entranceEnglishScore + '}';
+        return super.toStringPerson() + "yearOfAdmisson=" + yearOfAdmisson + ", entranceEnglishScore=" + entranceEnglishScore + '}';
     }
 
     public int getYearOfAdmisson() {

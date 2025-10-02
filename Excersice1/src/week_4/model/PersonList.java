@@ -4,8 +4,12 @@
  */
 package week_4.model;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Predicate;
+import week_4.DAO.StudentDAO;
+import week_4.DAO.TeacherDAO;
 
 /**
  *
@@ -13,9 +17,24 @@ import java.util.function.Predicate;
  */
 public class PersonList {
     private ArrayList<Person> personList;
-
-    public PersonList() {
-        personList = new ArrayList<>();
+    private TeacherDAO teacherDao;
+    private StudentDAO studentDao;
+    public ArrayList<Person> getAll() throws SQLException {
+        teacherDao = new TeacherDAO();
+        ArrayList<Person> personList = new ArrayList<>();
+        for (Teacher teacher : teacherDao.getAll())
+        {
+            personList.add(teacher);
+        }
+        studentDao = new StudentDAO();
+        for (Student student : studentDao.getAll())
+        {
+            personList.add(student);
+        }
+        return personList;
+    }
+    public PersonList() throws SQLException {
+        personList = getAll();
     }
 
     public ArrayList<Person> getPersonList() {
